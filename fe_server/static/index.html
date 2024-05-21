@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent Posts</title>
+</head>
+
+<body>
+    <h1>Recent Posts</h1>
+    <form id="postForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="text" id="postText" placeholder="Post text" required>
+        <button type="submit">Submit</button>
+    </form>
+    <ul id="posts"></ul>
+    <script>
+        const backendUrl = 'http://0.0.0.0:8000';
+
+        async function fetchPosts() {
+            const response = await fetch(`${backendUrl}/api/posts`);
+            const posts = await response.json();
+            const postsList = document.getElementById('posts');
+            postsList.innerHTML = '';
+            posts.forEach(post => {
+                const li = document.createElement('li');
+                li.textContent = `${post.username}: ${post.text}`;
+                postsList.appendChild(li);
+            });
+        }
+
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const postText = document.getElementById('postText').value;
+
+            await fetch(`${backendUrl}/api/posts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, text: postText })
+            });
+
+            document.getElementById('postForm').reset();
+            fetchPosts();
+        });
+
+        fetchPosts();
+    </script>
+</body>
+
+</html>
