@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: frontend-service:latest
+        ports:
+        - containerPort: 8081
+        imagePullPolicy: Never
+        env:
+        - name: BACKEND_URL
+          value: "http://192.168.49.2:31094"  # Set this to the external URL of the backend service

@@ -16,7 +16,7 @@
     </form>
     <ul id="posts"></ul>
     <script>
-        const backendUrl = 'http://0.0.0.0:8000';
+        const backendUrl = '{{ backend_url }}'; // This will be replaced by the actual URL
 
         async function fetchPosts() {
             const response = await fetch(`${backendUrl}/api/posts`);
